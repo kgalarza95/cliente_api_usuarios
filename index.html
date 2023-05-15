@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API REST SPRINGBOOT</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+
+<body>
+    <!--  <div class="container">
+        <button class="method" id="get-btn">GET</button>
+        <textarea class="text-area" id="get-body"></textarea>
+        <textarea class="response" id="get-response"></textarea>
+        <hr>
+        <br>
+        <button class="method" id="post-btn">POST</button>
+        <textarea class="text-area" id="post-body"></textarea>
+        <textarea class="response" id="post-response"></textarea>
+        <hr>
+        <br>
+        <button class="method" id="put-btn">PUT</button>
+        <textarea class="text-area" id="put-body"></textarea>
+        <textarea class="response" id="put-response"></textarea>
+        <hr>
+        <br>
+        <button class="method" id="delete-btn">DELETE</button>
+        <textarea class="text-area" id="delete-body"></textarea>
+    </div> -->
+
+    <h1>API Testing Tool</h1>
+    <div class="container">
+        <div>
+            <button class="button" onclick="sendRequest('GET')">GET</button>
+            <textarea class="textarea" id="get-body" placeholder="Request Body"></textarea>
+            <textarea class="textarea" id="get-response" placeholder="Response Body" readonly></textarea>
+        </div>
+        <div>
+            <button class="button" onclick="sendRequest('POST')">POST</button>
+            <textarea class="textarea" id="post-body" placeholder="Request Body"></textarea>
+            <textarea class="textarea" id="post-response" placeholder="Response Body" readonly></textarea>
+        </div>
+        <div>
+            <button class="button" onclick="sendRequest('PUT')">PUT</button>
+            <textarea class="textarea" id="put-body" placeholder="Request Body"></textarea>
+            <textarea class="textarea" id="put-response" placeholder="Response Body" readonly></textarea>
+        </div>
+        <div>
+            <button class="button" onclick="sendRequest('DELETE')">DELETE</button>
+            <textarea class="textarea" id="delete-body" placeholder="Request Body"></textarea>
+            <textarea class="textarea" id="delete-response" placeholder="Response Body" readonly></textarea>
+        </div>
+    </div>
+    <script>
+        function sendRequest(method) {
+            console.log("click metodo: " + method);
+            var url = "http://localhost:8083/SBApiJdk8-0.1/usuarios/"; // insert URL of API endpoint here
+            var body = "";
+
+            switch (method) {
+                case "GET":
+                    if (document.getElementById("get-body").value.length > 0) {
+                        url = url + document.getElementById("get-body").value;
+                    }
+
+                    fetch(url, { method: "GET" })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            document.getElementById("get-response").value = JSON.stringify(
+                                data,
+                                null,
+                                2
+                            );
+                        })
+                        .catch((error) => console.error(error));
+                    break;
+
+                case "POST":
+                    body = document.getElementById("post-body").value;
+                    fetch(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        //body: JSON.stringify(body),
+                        body: body,
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            document.getElementById("post-response").value = JSON.stringify(
+                                data,
+                                null,
+                                2
+                            );
+                        })
+                        .catch((error) => console.error(error));
+                    break;
+
+                case "PUT":
+                    body = document.getElementById("put-body").value;
+                    fetch(url, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        //body: JSON.stringify(body),
+                        body: body,
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            document.getElementById("put-response").value = JSON.stringify(
+                                data,
+                                null,
+                                2
+                            );
+                        })
+                        .catch((error) => console.error(error));
+                    break;
+
+                case "DELETE":
+                    body = document.getElementById("delete-body").value;
+                    url = url + document.getElementById("delete-body").value;
+                    fetch(url, {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                        //body: JSON.stringify(body),
+                        body: body,
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            document.getElementById("delete-response").value = JSON.stringify(
+                                data,
+                                null,
+                                2
+                            );
+                        })
+                        .catch((error) => console.error(error));
+                    break;
+
+                default:
+                    console.error("Invalid method");
+                    break;
+            }
+        }
+
+        /*  function sendRequest(method) {
+             console.log("click metodo: " + method);
+             var xhr = new XMLHttpRequest();
+             var url = "http://localhost:8083/SBApiJdk8-0.1/usuarios/"; // insert URL of API endpoint here
+             var body = "";
+             switch (method) {
+                 case "GET":
+                     xhr.open("GET", url);
+                     break;
+                 case "POST":
+                     xhr.open("POST", url);
+                     body = document.getElementById("post-body").value;
+                     break;
+                 case "PUT":
+                     xhr.open("PUT", url);
+                     body = document.getElementById("put-body").value;
+                     break;
+                 case "DELETE":
+                     xhr.open("DELETE", url);
+                     body = document.getElementById("delete-body").value;
+                     break;
+             }
+         }
+ 
+ 
+         function sendRequest(method) {
+             var xhr = new XMLHttpRequest();
+             var url = ""; // insert URL of API endpoint here
+             var body = "";
+             xhr.onreadystatechange = function () {
+                 if (xhr.readyState === XMLHttpRequest.DONE) {
+                     if (xhr.status === 200) {
+                         document.getElementById("response-text").value = xhr.responseText;
+                     } else {
+                         document.getElementById("response-text").value = "Error: " + xhr.statusText;
+                     }
+                 }
+             };
+             switch (method) {
+                 case "GET":
+                     xhr.open("GET", url);
+                     break;
+                 case "POST":
+                     xhr.open("POST", url);
+                     body = document.getElementById("post-body").value;
+                     xhr.setRequestHeader("Content-Type", "application/json");
+                     break;
+                 case "PUT":
+                     xhr.open("PUT", url);
+                     body = document.getElementById("put-body").value;
+                     xhr.setRequestHeader("Content-Type", "application/json");
+                     break;
+                 case "DELETE":
+                     xhr.open("DELETE", url);
+                     body = document.getElementById("delete-body").value;
+                     xhr.setRequestHeader("Content-Type", "application/json");
+                     break;
+             }
+             xhr.send(body);
+         } */
+    </script>
+</body>
+
+</html>
